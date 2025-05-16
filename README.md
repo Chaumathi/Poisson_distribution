@@ -1,4 +1,5 @@
-# Fitting Poisson  distribution
+# EXP 2: Fitting Poisson  distribution
+# Date:15.09.23
 # Aim : 
 
 To fit poisson distribution for the arrival of objects per minute from the feeder
@@ -29,47 +30,49 @@ The Poisson distribution is the discrete probability distribution of the number 
 ![image](https://user-images.githubusercontent.com/103921593/230282876-f4a5afbf-cac1-4648-a1b0-c78840638a8e.png)
 
 # Program :
-```
-NAME:CHARUMATHI A
-REF NO:212224430045
-```
-```
+```py
+Developed by : CHARUMATHI A
+Register number : 212224230045
+
 import numpy as np
 import math
 import scipy.stats
-
-L = list(map(int, input().split()))
-N, M = len(L), max(L)
-
-f = [L.count(i) for i in range(M+1)]
-sf = sum(f)
-p = [f[i] / sf for i in range(M+1)]
-mean = np.inner(range(M+1), p)
-
+L=[int(i) for i in input().split()]
+N=len(L); M=max(L) 
+X=list();f=list()
+for i in range (M+1):
+    c = 0
+    for j in range(N):
+        if L[j]==i:
+            c=c+1
+    f.append(c)
+    X.append(i)
+sf=np.sum(f)
+p=list()
+for i in range(M+1):
+    p.append(f[i]/sf) 
+mean=np.inner(X,p)
+p=list();E=list();xi=list()
 print("X P(X=x) Obs.Fr Exp.Fr xi")
 print("--------------------------")
-
-cal_chi2_sq = 0
 for x in range(M+1):
-    exp_fr = math.exp(-mean) * mean**x / math.factorial(x)
-    E = exp_fr * sf
-    xi = ((f[x] - E) ** 2) / E
-    cal_chi2_sq += xi
-    print(f"{x:2.2f} {exp_fr:2.3f} {f[x]:4.2f} {E:3.2f} {xi:3.2f}")
-
+    p.append(math.exp(-mean)*mean**x/math.factorial(x))
+    E.append(p[x]*sf)
+    xi.append((f[x]-E[x])**2/E[x])
+    print("%2.2f %2.3f %4.2f %3.2f %3.2f"%(x,p[x],f[x],E[x],xi[x]))
 print("--------------------------")
-table_chi2 = scipy.stats.chi2.ppf(1 - 0.01, df=M)
-print(f"Calculated value of Chi square is {cal_chi2_sq:4.2f}")
-print(f"Table value of chi square at 1% level is {table_chi2:4.2f}")
-print("The given data can be fitted in Poisson Distribution at 1% LOS" if cal_chi2_sq < table_chi2 else "The given data cannot be fitted in Poisson Distribution at 1% LOS")
-
-
-```
-
+cal_chi2_sq=np.sum(xi)
+print("Calculated value of Chi square is %4.2f"%cal_chi2_sq)
+table_chi2=scipy.stats.chi2.ppf(1-.01,df=M)
+print("Table value of chi square at 1 level is %4.2f"%table_chi2)
+if cal_chi2_sq<table_chi2:
+    print("The given data can be fitted in poisson Distribution at 1% LOS")
+else:
+    print("The given data cannot be fitted in Poisson Distribution at 1% LOS")
  
-
+```
 # Output : 
-![output](image.png)
+![280447781-c702cd34-e9b4-46de-9523-a5ee33bd577c](https://github.com/PriyankaAnnadurai/Poisson_distribution/assets/118351569/4d915f76-b588-451a-9f0e-9a98f675b4a8)
 
 
 
